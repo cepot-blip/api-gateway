@@ -1,0 +1,192 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id         Int      @id @default(autoincrement())
+  email      String
+  password   String
+  profession String
+  role       Role
+  avatar     String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // FORENGKY
+  MyCourses MyCourses[]
+  Reviews   Reviews[]
+  Orders    Orders[]
+}
+
+model Mentors {
+  id         Int      @id @default(autoincrement())
+  name       String
+  profile    String
+  email      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  //  FORENGKY
+  Courses Courses[]
+}
+
+model Courses {
+  id          Int      @id @default(autoincrement())
+  name        String
+  certificate Boolean
+  thumbnail   String?
+  type        Type
+  status      Status
+  price       Int
+  level       Level
+  description String?  @db.LongText
+  mentor_id   Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  //    RELATION
+  Mentors Mentors @relation(fields: [mentor_id], references: [id], onDelete: Cascade)
+
+  //  FORENGKY
+  Chapter       Chapters[]
+  Image_courses Image_courses[]
+  MyCourses     MyCourses[]
+  Reviews       Reviews[]
+  Orders        Orders[]
+}
+
+model Chapters {
+  id         Int      @id @default(autoincrement())
+  name       String
+  courses_id Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  //  RELATION
+  Courses Courses @relation(fields: [courses_id], references: [id], onDelete: Cascade)
+
+  //  FORENGKY
+  Lessons Lessons[]
+}
+
+model Lessons {
+  id         Int      @id @default(autoincrement())
+  name       String
+  video      String
+  chapter_id Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  //  RELATION
+  Chapters Chapters @relation(fields: [chapter_id], references: [id], onDelete: Cascade)
+}
+
+model Image_courses {
+  id         Int      @id @default(autoincrement())
+  image      String
+  courses_id Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  //  RELATION
+  Courses Courses @relation(fields: [courses_id], references: [id], onDelete: Cascade)
+}
+
+model MyCourses {
+  id         Int      @id @default(autoincrement())
+  courses_id Int
+  user_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  //  RELATION
+  Courses Courses @relation(fields: [courses_id], references: [id], onDelete: Cascade)
+  Users   Users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Reviews {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  courses_id Int
+  rating     Int
+  note       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  //  RELATION
+  Courses Courses @relation(fields: [courses_id], references: [id], onDelete: Cascade)
+  Users   Users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Orders {
+  id         Int      @id @default(autoincrement())
+  status     String
+  user_id    Int
+  courses_id Int
+  snap_url   String?
+  metadata   Json?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  //  RELATION
+  Users   Users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Courses Courses @relation(fields: [courses_id], references: [id], onDelete: Cascade)
+
+  //    FORENGKY
+  Payment_logs Payment_logs[]
+}
+
+model Payment_logs {
+  id           Int          @id @default(autoincrement())
+  status       String
+  payment_type Payment_type
+  raw_response Json
+  order_id     Int
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @updatedAt
+
+  //    RELATION
+  Orders Orders @relation(fields: [order_id], references: [id], onDelete: Cascade)
+}
+
+model Media {
+  id         Int      @id @default(autoincrement())
+  image      String   @db.LongText
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum Type {
+  free
+  premium
+}
+
+enum Status {
+  draft
+  published
+}
+
+enum Level {
+  all_level
+  intermediate
+  begginer
+  advance
+}
+
+enum Role {
+  admin
+  student
+}
+
+enum Payment_type {
+  virtual_account
+  credit_card
+}
