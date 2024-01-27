@@ -9,6 +9,7 @@
 - Javascript
 - ORM Prisma
 - ExpressJs
+- Html
 
 # Instalasi Paket
 
