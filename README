@@ -14,31 +14,31 @@
 
 1. clone repository
 
-```bash
+```javascript
 https://github.com/cepot-blip/api-gateway.git
 ```
 
 1. Install package
 
-```bash
+```javascript
 npm install
 ```
 
 1. buat database di mysql sesuikan dengan db yang dibuat di env
 
-```bash
-DB_NAME=api-gateway
+```javascript
+DB_NAME = api - gateway;
 ```
 
 1. migrate database prisma dengan menggunakan perintah berikut
 
-```bash
+```javascript
 npx prisma db push
 ```
 
 1. Running server
 
-```bash
+```javascript
 npm run dev (untuk development)
 npm run start (untuk production)
 ```
