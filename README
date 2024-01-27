@@ -1,0 +1,44 @@
+# API GATEWAY MENGGUNAKAN JAVASCRIPT
+
+# Persyaratan
+
+- Nodejs v21+
+
+# Teknologi yang di pakai
+
+- Javascript
+- ORM Prisma
+- ExpressJs
+
+# Instalasi Paket
+
+1. clone repository
+
+```bash
+https://github.com/cepot-blip/api-gateway.git
+```
+
+1. Install package
+
+```bash
+npm install
+```
+
+1. buat database di mysql sesuikan dengan db yang dibuat di env
+
+```bash
+DB_NAME=api-gateway
+```
+
+1. migrate database prisma dengan menggunakan perintah berikut
+
+```bash
+npx prisma db push
+```
+
+1. Running server
+
+```bash
+npm run dev (untuk development)
+npm run start (untuk production)
+```
